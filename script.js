@@ -64,31 +64,59 @@ let currentQuestion = 0;
 function init() {
   document.getElementById("all-questions").innerHTML = questions.length;
 
-    showQuestion(); //Die erste Frage wird direkt angezeigt
+  showQuestion(); //Die erste Frage wird direkt angezeigt
 }
 
 //Nach dem globalen Zähler die aktuelle Frage anzeigen
 function showQuestion() {
   let question = questions[currentQuestion];
 
-  document.getElementById("questiontext").innerHTML = question['question']; // Der Text wird in das HTML Element mit der ID questiontext geschrieben
+  document.getElementById("questiontext").innerHTML = question["question"]; // Der Text wird in das HTML Element mit der ID questiontext geschrieben
 
-  document.getElementById("answer_1").innerHTML = question['answer_1'];
-  document.getElementById("answer_2").innerHTML = question['answer_2'];
-  document.getElementById("answer_3").innerHTML = question['answer_3'];
-  document.getElementById("answer_4").innerHTML = question['answer_4'];
+  document.getElementById("answer_1").innerHTML = question["answer_1"];
+  document.getElementById("answer_2").innerHTML = question["answer_2"];
+  document.getElementById("answer_3").innerHTML = question["answer_3"];
+  document.getElementById("answer_4").innerHTML = question["answer_4"];
 }
 
 // Antwort überprüfen
 function answer(selection) {
   let question = questions[currentQuestion]; //Aktuelle Frage aus dem Fragenarray
   let selectedQuestionNumber = selection.slice(-1); //Welche Antwort wurde ausgewählt? answer_1 -> 1: Wir verwenden slice um den letzten Buchstaben auszulesen
+  let idOfRightAnswer = `answer_${question["right_answer"]}`; //Die ID der richtigen Antwort ermitteln, z.B. answer_3
 
-    if (selectedQuestionNumber == question['right_answer']) { //Überprüfung ob die ausgewählte Antwort der richtigen Antwort entspricht: z.B. 3=3
-        console.log("Richtige Antwort");
-        document.getElementById(selection).parentNode.classList.add('bg-success'); //Hintergrund der ausgewählten Antwort grün färben
-    } else {
-        console.log("Falsche Antwort");
-        document.getElementById(selection).parentNode.classList.add('bg-danger'); //Hintergrund der ausgewählten Antwort rot färben
+  if (selectedQuestionNumber == question["right_answer"]) {
+    //Überprüfung ob die ausgewählte Antwort der richtigen Antwort entspricht: z.B. 3=3
+    console.log("Richtige Antwort");
+    document.getElementById(selection).parentNode.classList.add("bg-success"); //Hintergrund der ausgewählten Antwort grün färben
+  } else {
+    console.log("Falsche Antwort");
+    document.getElementById(selection).parentNode.classList.add("bg-danger"); //Hintergrund der ausgewählten Antwort rot färben
+    document
+      .getElementById(idOfRightAnswer)
+      .parentNode.classList.add("bg-success"); //Die richtige Antwort gleichzeitg grün färben
+  }
+  document.getElementById("next-button").disabled = false; //Der "Nächste Frage" Button wird aktiv geschaltet
 }
+
+function nextQuestion() {
+  currentQuestion++; //Der globale Fragenzähler wird erhöht z.B. von 0 auf 1
+    document.getElementById("next-button").disabled = true; //Der "Nächste Frage" Button wird wieder deaktiviert
+  resetAnswerButtons(); //Die Hintergrundfarbe der Antwortbuttons wird zurückgesetzt
+  showQuestion(); //Die nächste Frage wird angezeigt
+}
+
+function resetAnswerButtons() {
+document
+    .getElementById("answer_1")
+    .parentNode.classList.remove("bg-danger", "bg-success"); //Die Hintergrundfarbe der Antworten wird zurückgesetzt
+  document
+    .getElementById("answer_2")
+    .parentNode.classList.remove("bg-danger", "bg-success");
+  document
+    .getElementById("answer_3")
+    .parentNode.classList.remove("bg-danger", "bg-success");
+  document
+    .getElementById("answer_4")
+    .parentNode.classList.remove("bg-danger", "bg-success");
 }
