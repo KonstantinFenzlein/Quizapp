@@ -1,63 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QuizApp</title>
+    <link rel="icon" type="image/svg+xml" href="./img/favicon.svg" />
 
-    <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
-
-    <!-- Bootstrap CSS and JS files -->
+    <!-- Bootstrap CSS (vor style.css, damit eigene Regeln Bootstrap überschreiben) -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-      crossorigin="anonymous"
-    ></script>
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="questions.js" defer></script>
+    <script src="script.js" defer></script>
   </head>
 
   <body onload="init()">
     <nav class="navbar navbar-light bg-light">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">QuizApp</span>
+      <div class="container-fluid justify-content-center">
+        <span class="navbar-brand mb-0 quiz-title" onclick="backToStart()">QuizApp</span>
       </div>
     </nav>
 
-    <div class="container">
-
+    <main class="container">
       <div class="card quiz-card">
-        <img src="./img/pencil.jpg" class="card-img-top" alt="pencil" />
-        <div class="card-body">
+        <img src="./img/pencil.jpg" class="card-img-top" alt="Bleistift" />
+
+        <div class="progress quiz-progress d-none" id="progress" role="progressbar" aria-label="Fortschritt">
+          <div class="progress-bar" id="progress-bar" style="width: 0%">0 %</div>
+        </div>
+
+        <!-- Startbildschirm: Thema auswählen -->
+        <div class="card-body" id="startScreen">
+          <h5 class="card-title text-center">Willkommen zur QuizApp!</h5>
+          <p class="text-center text-secondary">Wähle ein Thema, um das Quiz zu starten.</p>
+          <div class="topic-list" id="topic-list"></div>
+        </div>
+
+        <!-- Fragen -->
+        <div class="card-body d-none" id="questionBody">
+          <div class="question-header">
+            <span class="badge bg-primary" id="topic-badge">Thema</span>
+            <span class="badge bg-secondary" id="timer">15 s</span>
+          </div>
+
           <h5 class="card-title" id="questiontext">Frage</h5>
 
-          <div class="card quiz-answer-card mb-2" onclick="answer('answer_1')"> 
-            <div class="card-body" id="answer_1">Antwort</div>
-          </div>
-
-          <div class="card quiz-answer-card mb-2" onclick="answer('answer_2')">
-            <div class="card-body" id="answer_2">Antwort</div>
-          </div>
-
-          <div class="card quiz-answer-card mb-2" onclick="answer('answer_3')">
-            <div class="card-body" id="answer_3">Antwort</div>
-          </div>
-
-          <div class="card quiz-answer-card mb-2" onclick="answer('answer_4')">
-            <div class="card-body" id="answer_4">Antwort</div>
-          </div>
+          <div id="answers"></div>
 
           <div class="question-footer">
-            <span> <b>1</b> von <b id="all-questions">5</b> Fragen </span>
-            <button onclick="nextQuestion()"class="btn btn-primary" id="next-button" disabled>Nächste Frage</button>
+            <span> <b id="question-number">1</b> von <b id="all-questions">5</b> Fragen </span>
+            <button onclick="nextQuestion()" class="btn btn-primary" id="next-button" disabled>Nächste Frage</button>
+          </div>
+        </div>
+
+        <!-- Endscreen -->
+        <div class="card-body text-center d-none" id="endScreen">
+          <img src="./img/trophy.svg" class="result-image" id="result-image" alt="" />
+          <h5 class="card-title" id="result-title">Quiz beendet!</h5>
+          <p>Du hast <b id="amount-of-right-answers">0</b> von <b id="amount-of-questions">0</b> Fragen richtig beantwortet.</p>
+          <p class="text-success fw-bold d-none" id="new-highscore">Neuer Highscore!</p>
+          <div class="end-buttons">
+            <button onclick="restartGame()" class="btn btn-primary">Nochmal spielen</button>
+            <button onclick="backToStart()" class="btn btn-outline-primary">Anderes Thema</button>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   </body>
 </html>
